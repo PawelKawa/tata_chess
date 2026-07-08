@@ -7,6 +7,8 @@
     </div>
 
     <article v-else-if="post" class="post">
+      <RouterLink to="/" class="post__back">← Wróć do aktualności</RouterLink>
+
       <img
         v-if="post.cover_image"
         :src="post.cover_image"
@@ -60,6 +62,15 @@ const formattedDate = computed(() => {
 <style scoped>
 .state { text-align: center; padding: 3rem; color: #888; }
 .state--error { color: #c0392b; }
+
+.post__back {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: #4f46e5;
+  text-decoration: none;
+  font-size: .9rem;
+}
+.post__back:hover { text-decoration: underline; }
 
 .post__cover {
   width: 100%;
