@@ -10,7 +10,10 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use FilamentTiptapEditor\TiptapEditor;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class PostResource extends Resource
 {
@@ -45,7 +48,10 @@ class PostResource extends Resource
                 ->image()
                 ->disk('r2')
                 ->directory('covers')
-                ->nullable(),
+                ->nullable()
+                ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
+                    return self::processAndUpload($file, 'covers', 1400, 85);
+                }),
 
             TiptapEditor::make('content')
                 ->label('Treść')
@@ -65,13 +71,32 @@ class PostResource extends Resource
                 ->directory('galleries')
                 ->reorderable()
                 ->nullable()
-                ->columnSpanFull(),
+                ->columnSpanFull()
+                ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
+                    return self::processAndUpload($file, 'galleries', 1200, 80);
+                }),
 
             Forms\Components\DateTimePicker::make('published_at')
                 ->label('Data publikacji')
                 ->nullable()
                 ->helperText('Zostaw puste aby zapisać jako szkic'),
         ]);
+    }
+
+    private static function processAndUpload(
+        TemporaryUploadedFile $file,
+        string $directory,
+        int $maxWidth,
+        int $quality
+    ): string {
+        $image = Image::read($file->getRealPath());
+        $image->scaleDown(width: $maxWidth);
+        $encoded = $image->toJpeg(quality: $quality);
+
+        $path = $directory . '/' . Str::uuid() . '.jpg';
+        Storage::disk('r2')->put($path, (string) $encoded);
+
+        return $path;
     }
 
     public static function table(Table $table): Table
