@@ -12,7 +12,10 @@ use Filament\Tables\Table;
 use FilamentTiptapEditor\TiptapEditor;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Laravel\Facades\Image;
+
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Format;
+use Intervention\Image\ImageManager;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class PostResource extends Resource
@@ -89,9 +92,10 @@ class PostResource extends Resource
         int $maxWidth,
         int $quality
     ): string {
-        $image = Image::read($file->getRealPath());
+        $manager = new ImageManager(new Driver());
+        $image   = $manager->decode(file_get_contents($file->getRealPath()));
         $image->scaleDown(width: $maxWidth);
-        $encoded = $image->toJpeg(quality: $quality);
+        $encoded = $image->encode(new \Intervention\Image\Encoders\JpegEncoder(quality: $quality));
 
         $path = $directory . '/' . Str::uuid() . '.jpg';
         Storage::disk('r2')->put($path, (string) $encoded);
