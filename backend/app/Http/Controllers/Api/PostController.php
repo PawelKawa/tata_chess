@@ -18,9 +18,7 @@ class PostController extends Controller
                 'id'           => $post->id,
                 'title'        => $post->title,
                 'slug'         => $post->slug,
-                'cover_image'  => $post->cover_image
-                                    ? Storage::disk('r2')->url($post->cover_image)
-                                    : null,
+                'cover_image'  => $this->fileUrl($post->cover_image),
                 'excerpt'      => $post->excerpt,
                 'published_at' => $post->published_at?->toIso8601String(),
             ]);
@@ -39,15 +37,20 @@ class PostController extends Controller
             'id'           => $post->id,
             'title'        => $post->title,
             'slug'         => $post->slug,
-            'cover_image'  => $post->cover_image
-                                ? Storage::disk('r2')->url($post->cover_image)
-                                : null,
+            'cover_image'  => $this->fileUrl($post->cover_image),
             'content'      => $post->content,
             'published_at' => $post->published_at?->toIso8601String(),
             'images'       => $post->images->map(fn($img) => [
-                'path'  => Storage::disk('r2')->url($img->path),
+                'path'  => $this->fileUrl($img->path),
                 'order' => $img->order,
             ]),
         ]);
+    }
+
+    private function fileUrl(?string $path): ?string
+    {
+        if (!$path) return null;
+        if (str_starts_with($path, 'http')) return $path;
+        return Storage::disk('r2')->url($path);
     }
 }

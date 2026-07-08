@@ -14,7 +14,7 @@ class PostSeeder extends Seeder
         $post1 = Post::create([
             'title'        => 'Turniej Majowy 2026 — relacja',
             'slug'         => 'turniej-majowy-2026-relacja',
-            'cover_image'  => null,
+            'cover_image'  => 'https://picsum.photos/seed/chesscover1/1200/600',
             'published_at' => now()->subDays(5),
             'content'      => <<<HTML
 <h2>Wielki sukces turnieju majowego!</h2>
@@ -49,7 +49,7 @@ HTML,
         Post::create([
             'title'        => 'Zapraszamy na Turniej Letni 2026',
             'slug'         => 'zapraszamy-na-turniej-letni-2026',
-            'cover_image'  => null,
+            'cover_image'  => 'https://picsum.photos/seed/chesscover2/1200/600',
             'published_at' => now()->subDays(2),
             'content'      => <<<HTML
 <h2>Już wkrótce — Turniej Letni 2026</h2>
@@ -79,7 +79,7 @@ HTML,
         $post4 = Post::create([
             'title'        => 'Podsumowanie sezonu 2025/2026',
             'slug'         => 'podsumowanie-sezonu-2025-2026',
-            'cover_image'  => null,
+            'cover_image'  => 'https://picsum.photos/seed/chesscover4/1200/600',
             'published_at' => now()->subMonths(2),
             'content'      => <<<HTML
 <h2>Miniony sezon za nami</h2>
