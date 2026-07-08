@@ -1,0 +1,15 @@
+# Backend
+backend/.env
+backend/vendor/
+backend/storage/logs/
+backend/storage/app/
+backend/bootstrap/cache/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# System
+.DS_Store
