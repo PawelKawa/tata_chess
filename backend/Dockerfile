@@ -32,7 +32,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/framework/views storage/framework/cache \
+ && chmod -R 775 bootstrap/cache storage \
+ && composer install --no-dev --optimize-autoloader --no-interaction
 
 EXPOSE 8080
 
