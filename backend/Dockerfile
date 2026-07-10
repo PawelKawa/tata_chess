@@ -39,6 +39,7 @@ RUN mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/fra
 EXPOSE 8080
 
 CMD php artisan migrate --force \
+ && php artisan filament:assets \
  && php artisan config:cache \
  && php artisan route:cache \
  && php artisan view:cache \
